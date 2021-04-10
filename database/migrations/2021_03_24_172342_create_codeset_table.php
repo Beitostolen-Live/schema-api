@@ -14,9 +14,12 @@ class CreateCodesetTable extends Migration
     public function up()
     {
         Schema::create('codeset', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->bigInteger('id')->primary();
+            $table->bigInteger('typeCodeSetId')->nullable();
+            $table->string('typeCodeId')->nullable();
+            $table->string('name')->unique()->notNullable();
             $table->string('description');
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

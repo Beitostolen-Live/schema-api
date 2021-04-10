@@ -14,14 +14,15 @@ class CreateCodeTable extends Migration
     public function up()
     {
         Schema::create('code', function (Blueprint $table) {
-            $table->unsignedBigInteger('codeset_id');
-            $table->string('codeid');
+            $table->bigInteger('codesetid');
+            $table->string('codeid')->index();
             $table->string('description');
             $table->dateTime('valid_from', $precision = 0);
-            $table->dateTime('valid_to', $precision = 0);
+            $table->dateTime('valid_to', $precision = 0)->nullable();
             $table->timestamps();
-            $table->primary(['codeset_id','codeid']);
-            $table->foreign('codeset_id')
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
+            $table->primary(['codesetid','codeid']);
+            $table->foreign('codesetid')
                 ->references('id')
                 ->on('codeset')
                 ->onUpdate('cascade')

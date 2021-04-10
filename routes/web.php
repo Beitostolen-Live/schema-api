@@ -17,6 +17,12 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api/v1'], function() use ($router) {
-    $router->get('/codeset/{codeset_id}', [uses => 'CodeSetCodeController@showCodesFromCodeSet']);
+$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function() use ($router) {
+    // Codeset
+    $router->get('/codeset/{codeset_id}', 'CodeSetController@show');
+    $router->get('/codeset/{codeset_id}/codes', 'CodeSetController@showCodeSetCodes');
+    $router->post('/codeset/{codeset_id}', 'CodeSetController@create');
+    // Code
+    $router->get('/codeset/{codeset_id}/code/{code_id}', 'CodeController@show');
+    $router->post('/codeset/{codeset_id}/code/{code_id}', 'CodeController@create');
 });
