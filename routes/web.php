@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function() use ($router) {
+$router->group(['prefix' => 'api/v1', 'middleware' => ['cors', 'auth']], function() use ($router) {
     // Codeset
     $router->get('/codeset/{codeset_id}', 'CodeSetController@show');
     $router->get('/codeset/{codeset_id}/codes', 'CodeSetController@showCodeSetCodes');
@@ -25,4 +25,8 @@ $router->group(['prefix' => 'api/v1', 'middleware' => 'auth'], function() use ($
     // Code
     $router->get('/codeset/{codeset_id}/code/{code_id}', 'CodeController@show');
     $router->post('/codeset/{codeset_id}/code/{code_id}', 'CodeController@create');
+    // Fallback
+    $router->options('{any:.*}', function (){
+        return;
+    });
 });
